@@ -41,18 +41,22 @@ public class UserInfoService implements UserDetailsService {
 
     }
 
-    public UserRegistrationDTO registerUser(UserRegistrationDTO user) {
-        UserDb newUser = new UserDb();
-        newUser.setFiscalCode(user.getFiscalCode());
-        newUser.setPassword(encoder.encode(user.getPassword()));
-        newUser.setRole(user.getRole());
-        userRepository.save(newUser);
-        return user;
+    public ResponseEntity<String> registerUser(UserRegistrationDTO user) {
+        if (user != null) {
+            UserDb newUser = new UserDb();
+            newUser.setFiscalCode(user.getFiscalCode());
+            newUser.setPassword(encoder.encode(user.getPassword()));
+            newUser.setRole(user.getRole());
+            userRepository.save(newUser);
+            return ResponseEntity.status(201).build();
+        } else {
+            return ResponseEntity.status(404).build();
+        }
     }
 
-    public void deleteAll() {
+    public ResponseEntity<String> deleteAll() {
         userRepository.deleteAll();
-        ;
+        return ResponseEntity.status(201).build();
     }
 
     public ResponseEntity<?> deleteById(Long id) {
@@ -82,14 +86,15 @@ public class UserInfoService implements UserDetailsService {
 
     }
 
-    public ResponseEntity<?> changePassword(Long id, String pass) {
-        try {
-            UserDb user = userRepository.findById(id).get();
+    public ResponseEntity<String> changePassword(Long id, String oldPass, String pass) {
+
+        UserDb user = userRepository.findById(id).get();
+        if (user != null && user.getPassword() == encoder.encode(oldPass)) {
             user.setPassword(encoder.encode(pass));
             return new ResponseEntity<>("Success!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>("Error, The old Password don't Metch or User Not Found! Try Again.",
+                    HttpStatus.NOT_FOUND);
         }
-
     }
 }

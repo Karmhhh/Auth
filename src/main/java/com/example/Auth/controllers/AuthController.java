@@ -6,24 +6,15 @@ import com.example.Auth.DTO.UserRegistrationDTO;
 import com.example.Auth.Service.UserInfoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     UserInfoService userService;
    
-
-   
-
-    @PostMapping("/add_new_user")
-    public UserRegistrationDTO addNewUser(@RequestBody UserRegistrationDTO user)
-            throws Exception {
-        user.setRole("ADMIN");
-        return this.userService.registerUser(user);
-    }
-
-
 
 }
