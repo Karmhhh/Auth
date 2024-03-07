@@ -1,47 +1,44 @@
 package com.example.Auth.DTO;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class UserRegistrationDTO {
-    @Autowired
-    private String nominative;
-    public String getNominative() {
-        return nominative;
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
     }
-    public void setNominative(String nominative) {
-        this.nominative = nominative;
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
-    @Autowired
-    private String phoneNumber;
-    public String getPhoneNumber() {
-        return phoneNumber;
+
+    private String fiscalCode;
+
+    public String getFiscalCode() {
+        return fiscalCode;
     }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+
+    public void setFiscalCode(String fiscalCode) {
+        this.fiscalCode = fiscalCode;
     }
-    @Autowired
-    private String email;
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    @Autowired
+
     private String password;
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
-    @Autowired
-    private String roles;
-    public String getRoles() {
-        return roles;
+
+    private String role;
+
+    public String getRole() {
+        return role;
     }
-    public void setRoles(String roles) {
-        this.roles = roles;
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

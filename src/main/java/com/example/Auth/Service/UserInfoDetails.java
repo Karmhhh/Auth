@@ -14,11 +14,10 @@ public class UserInfoDetails implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public UserInfoDetails(UserDb userInfo) {
+ public UserInfoDetails(UserDb userInfo){
         this.fiscalCode = userInfo.getFiscalCode();
         this.password = userInfo.getPassword();
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userInfo.getRole());
-        this.authorities.add(authority);
+        this.authorities = List.of(new SimpleGrantedAuthority(userInfo.getRole()));
     }
 
 
