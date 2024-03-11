@@ -1,6 +1,10 @@
 package com.example.Auth.DTO;
 
+import com.example.Auth.Entity.RoleType;
+
 public class UserRegistrationDTO {
+    RoleType roleEnum;
+    
     private Long userId;
 
     public Long getUserId() {
@@ -38,7 +42,22 @@ public class UserRegistrationDTO {
     }
 
     public void setRole(String role) {
-        this.role = role;
+
+        switch (role) {
+            case "user":
+                this.role = roleEnum.ROLE_USER.toString();
+                break;
+            case "admin":
+                this.role = roleEnum.ROLE_ADMIN.toString();
+                break;
+            case "super_admin":
+                this.role = roleEnum.ROLE_SUPERADMIN.toString();
+                break;
+            default: 
+            this.role = roleEnum.ROLE_USER.toString();
+                break;
+        }
+
     }
 
 }

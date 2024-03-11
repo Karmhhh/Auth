@@ -1,5 +1,6 @@
 package com.example.Auth.controllers;
 
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.Auth.DTO.ChangePasswordDTo;
 import com.example.Auth.DTO.UserRegistrationDTO;
 import com.example.Auth.Entity.UserDb;
 import com.example.Auth.Service.JwtService;
@@ -46,14 +49,13 @@ public class PublicController {
 
     @PostMapping("/registerUser")
     public ResponseEntity<String> saveUser(@RequestBody UserRegistrationDTO user) {
-           return  userService.registerUser(user);
- 
+           return  userService.registerUser(user); 
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<String> changePassword(String username, String oldPass, String newPass) {
-        UserDb user = userRepo.findUserByFiscalCode(username).get();
-        return userService.changePassword(user.getUserId(), oldPass, newPass);
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTo changerequest) {
+   
+        return userService.changePassword(changerequest.getFiscalCode(),changerequest.getOldPass(),changerequest.getNewPass());
     }
 
     @DeleteMapping("/deleteAll")

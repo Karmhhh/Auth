@@ -23,7 +23,7 @@ import com.example.Auth.Service.UserInfoService;
 import com.example.Auth.config.filtri.JwtAuthFilter;
 
 @Configuration
-@Order(0)
+@Order(1)
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -54,6 +54,12 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/public/**").permitAll())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/admin/**").authenticated())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/user/**").authenticated())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/superAdmin/**").authenticated())
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().authenticated())
                 .sessionManagement(management -> management

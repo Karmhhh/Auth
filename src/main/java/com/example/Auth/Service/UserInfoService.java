@@ -1,25 +1,23 @@
 package com.example.Auth.Service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.Auth.DTO.UserRegistrationDTO;
 import com.example.Auth.Entity.UserDb;
 import com.example.Auth.repos.UserRepos;
 
 @Service
 public class UserInfoService implements UserDetailsService {
-
+    Logger LOG;
     @Autowired
     private UserRepos userRepository;
     List<UserRegistrationDTO> usersDto;
@@ -60,17 +58,11 @@ public class UserInfoService implements UserDetailsService {
     }
 
     public ResponseEntity<?> deleteById(Long id) {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
         try {
             userRepository.deleteById(id);
-            map.put("status", 1);
-            map.put("message", "Record is deleted successfully!");
-            return new ResponseEntity<>(map, HttpStatus.OK);
+            return ResponseEntity.status(201).build();
         } catch (Exception ex) {
-            map.clear();
-            map.put("status", 0);
-            map.put("message", "Data is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).build();
         }
     }
 
@@ -86,15 +78,18 @@ public class UserInfoService implements UserDetailsService {
 
     }
 
-    public ResponseEntity<String> changePassword(Long id, String oldPass, String pass) {
-
-        UserDb user = userRepository.findById(id).get();
-        if (user != null && user.getPassword() == encoder.encode(oldPass)) {
-            user.setPassword(encoder.encode(pass));
-            return new ResponseEntity<>("Success!", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Error, The old Password don't Metch or User Not Found! Try Again.",
-                    HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<String> changePassword(String username, String oldPass, String pass) {
+        UserDb userDetail = userRepository.findUserByFiscalCode(username).get();
+       
+        if ( userDetail.getPassword().toString().equals(encoder.encode(oldPass).toString())) {
+                userDetail.setPassword(encoder.encode(pass));
+                userRepository.save(userDetail);
+               
+                return ResponseEntity.ok().build();
+            } else {
+               
+                return ResponseEntity.badRequest().build();
+            }
     }
+
 }
